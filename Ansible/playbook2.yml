@@ -1,0 +1,45 @@
+---
+- name: Install nodejs
+  hosts: all
+  become: yes
+
+  vars:
+   destin_file: /home/alex/app
+
+
+  tasks:
+  
+    - name: install nodejs prerequisites
+      apt:
+        name:
+          - apt-transport-https
+          - gcc
+          - g++
+          - make
+        state: present
+    - name: add nodejs apt key
+      apt_key:
+        url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+        state: present
+    - name: add nodejs repository
+      apt_repository:
+        repo: deb https://deb.nodesource.com/node_14.x {{ ansible_lsb.codename }} main
+        state: present
+        update_cache: yes
+    - name: install nodejs
+      apt:
+        name: nodejs
+        state: present
+    - name: Install pm2
+      shell: sudo npm install pm2@latest -g | pm2 startup systemd | sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u alex --hp /home/alex | pm2 save | sudo systemctl start pm2-alex
+
+
+    - name: Example clone of a single branch
+      git:
+        repo: https://github.com/AlexMerkushyn/Weight-Tracker.git
+        dest: /home/alex/app
+        clone: yes
+        update: yes
+
+    - name: start nodejs
+      shell: cd /home/alex/app | npm install | npm run initdb | pm2 start ./src/index.js

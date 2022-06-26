@@ -1,0 +1,8 @@
+[staging_servers]
+20.245.26.95 ansible_user=alex ansible_pass=Password1234!
+20.245.26.63 ansible_user=alex ansible_pass=Password1234!
+
+[prodact_servers]
+20.245.26.54 ansible_user=alex ansible_pass=Password1234!
+20.245.26.39 ansible_user=alex ansible_pass=Password1234!
+20.245.26.62 ansible_user=alex ansible_pass=Password1234!
